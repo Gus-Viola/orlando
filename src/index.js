@@ -12,5 +12,3 @@ ReactDOM.render(<App />, document.getElementById('root'));
 
 //instructions from https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app#docsNav
 serviceWorker.register();
-
-//testing
