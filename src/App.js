@@ -2,6 +2,12 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+/*
+The following code came from Udacity's Google Maps API course:
+initMap(),
+*/
+
+
 
 class App extends Component {
 
@@ -22,13 +28,22 @@ class App extends Component {
   }//render
 
   initMap() {
-    // Constructor creates a new map - only center and zoom are required.
     let map;
+
     map = new window.google.maps.Map(document.getElementById('map'), {
       center: {lat: 40.7413549, lng: -73.9980244},
       zoom: 13
     });
-  }
+
+    const tribeca = {lat: 40.719526, lng: -74.0089934};
+    const marker = new window.google.maps.Marker({
+      position: tribeca,
+      map: map,
+      title: 'First Marker!'
+    });
+
+
+  }//initMap()
 
 }//App
 
