@@ -2,22 +2,35 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+
 class App extends Component {
+
+  componentDidMount() {
+    this.initMap();
+  }
+
   render() {
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
         </header>
-        <body>
-        This is a test
-        </body>
+          <div id="map"></div>
       </div>
-    );
-  }
-}
 
-//First Commit
+    );
+  }//render
+
+  initMap() {
+    // Constructor creates a new map - only center and zoom are required.
+    let map;
+    map = new window.google.maps.Map(document.getElementById('map'), {
+      center: {lat: 40.7413549, lng: -73.9980244},
+      zoom: 13
+    });
+  }
+
+}//App
 
 export default App;
 
