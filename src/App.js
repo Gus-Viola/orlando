@@ -4,8 +4,12 @@ import './App.css';
 
 /*
 The following code came from Udacity's Google Maps API course:
-initMap(), populateInfoWindow()
+initMap(), populateInfoWindow(), marker functions
 as well as suggested variables, such as map, markers, etc.
+The following code came from my Udacity's myreads project
+query state, updateQuery, etc
+I used the npm yelp package
+https://www.npmjs.com/package/yelp-api
 
 2) E colocar uma lista dos lugares com a opção de filtrar eles por nome
 3) Aria Roles
@@ -20,6 +24,7 @@ let markers =[];
 class App extends Component {
 
   state = {
+
       locations: [
        {title: 'Park Ave Penthouse', location: {lat: 40.7713024, lng: -73.9632393}, marker: 6},
        {title: 'Chelsea Loft', location: {lat: 40.7444883, lng: -73.9949465}, marker: 1},
@@ -27,8 +32,56 @@ class App extends Component {
        {title: 'East Village Hip Studio', location: {lat: 40.7281777, lng: -73.984377}, marker: 3},
        {title: 'TriBeCa Artsy Bachelor Pad', location: {lat: 40.7195264, lng: -74.0089934}, marker: 4},
        {title: 'Chinatown Homey Space', location: {lat: 40.7180628, lng: -73.9961237}, marker: 5}
-     ]
+     ],
+     query: '',
+     errorSearching: false
   }
+
+
+  updateQuery = (query) => {
+    // this.setState({ query: query })
+
+    //refactoring of the shelving and auxliary functions
+    // const books  = this.state.books.map(book => {
+    //     const found = this.props.appStateBooks.find(appBook => appBook.id === book.id);
+    //     if(found) {
+    //         return found;
+    //     } else {
+    //         return book
+    //     }
+    // })
+
+    // if (query) {
+    //
+    //   BooksAPI.search(query.trim()).then(
+    //       books => {
+    //         if(query===this.state.query) {
+    //           if (books.length > 0) {
+    //             this.setState({books: books, errorSearching: false})
+    //             // this.shelving(this.state.books)
+    //             this.setState({ books });
+    //           } else {
+    //             this.setState({ books: [], errorSearching: true})
+    //           }}}).then(this.setState({ books }));
+    //         }  else {
+    //           this.setState({ books: [], errorSearching: false });
+    //         }//else
+
+      // this.shelving(this.state.books)
+
+fetch('https://api.foursquare.com/v2/venues/explore?client_id=SJV1ISHPCCXJPD51FD0YFB5424GZZ0Q1E1THCOM12G21UPKO&client_secret=QJQBOLAC1SPUD0KZR2TJ5R1QGE3TEJGFWPPUB4HUHX1OLXBF&v=20180323&ll=40.7413549,-73.9980244&radius=1000&query=attraction')
+  .then(response => response.json()).then(result => {
+    // console.log(result.response.groups[0].items)})
+    console.log(result.response.groups[0].items);
+    this.setState({ locations : result.response.groups[0].items});
+    console.log(this.state.locations);
+    this.initMap();
+  })
+  .catch(err => console.log("I received the following error: "+err))
+      // this.setState({ books });
+
+  }//updateQuery
+
 
 
   componentDidMount() {
@@ -41,6 +94,13 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
+          <input
+            type="text"
+            placeholder="Search by title or author"
+            value = {this.state.query}
+            onChange={(event)=> this.updateQuery(event.target.value) }
+          />
+
         </header>
           <div id="map"></div>
       </div>
@@ -81,8 +141,19 @@ class App extends Component {
     // The following group uses the location array to create an array of markers on initialize.
     for (let i = 0; i < this.state.locations.length; i++) {
       // Get the position from the location array.
-      const position = this.state.locations[i].location;
-      const title = this.state.locations[i].title;
+      let position;
+      if (this.state.locations[i].location) {
+         position = this.state.locations[i].location;
+      } else {
+        position = { lat: this.state.locations[i].venue.location.lat, lng: this.state.locations[i].venue.location.lng }
+      }
+      //venue.location.lat , venue.location.lng
+      let title;
+      if (this.state.locations[i].title) {
+        title = this.state.locations[i].title;
+      } else {
+        title = this.state.locations[i].venue.name;
+      }
       // Create a marker per location, and put into markers array.
       const marker = new window.google.maps.Marker({
         map: map,
