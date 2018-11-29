@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import escapeRegExp from 'escape-string-regexp';
 
 /*
 The following code came from Udacity's Google Maps API course:
@@ -11,7 +12,8 @@ query state, updateQuery, etc
 I used the npm yelp package
 https://www.npmjs.com/package/yelp-api
 
-2) E colocar uma lista dos lugares com a opção de filtrar eles por nome
+Faltam:
+2) Lista dos lugares com a opção de filtrar eles por nome
 3) Aria Roles
 
 */
@@ -25,59 +27,72 @@ class App extends Component {
   state = {
 
       locations: [
-     //   {title: 'Park Ave Penthouse', location: {lat: 40.7713024, lng: -73.9632393}, marker: 6},
-     //   {title: 'Chelsea Loft', location: {lat: 40.7444883, lng: -73.9949465}, marker: 1},
-     //   {title: 'Union Square Open Floor Plan', location: {lat: 40.7347062, lng: -73.9895759}, marker: 2},
-     //   {title: 'East Village Hip Studio', location: {lat: 40.7281777, lng: -73.984377}, marker: 3},
-     //   {title: 'TriBeCa Artsy Bachelor Pad', location: {lat: 40.7195264, lng: -74.0089934}, marker: 4},
-     //   {title: 'Chinatown Homey Space', location: {lat: 40.7180628, lng: -73.9961237}, marker: 5}
-     // ]
-
-       {title: "Walt Disney's Magic Kingdom",  location: {lat: 28.417663 , lng: -81.5834007}},
-       {title: "Bob Evans",  location: {lat: 28.3332783 , lng: -81.5850286}},
-       {title: "Universal Studios Florida",  location: {lat: 28.4731193 , lng: -81.4671166}},
-       {title: "Epcot Center",  location: {lat: 28.374694, lng: -81.5515927 }},
-       {title: "University of Central Florida",  location: {lat: 28.580463, lng: -81.250721}}
-     ]
-     // query: '',
+       {title: "Walt Disney's Magic Kingdom",  location: {lat: 28.417663 , lng: -81.5834007}, referralId: 1},
+       {title: "Bob Evans",  location: {lat: 28.3332783 , lng: -81.5850286}, referralId: 2},
+       {title: "Universal Studios Florida",  location: {lat: 28.4731193 , lng: -81.4671166}, referralId: 3},
+       {title: "Epcot Center",  location: {lat: 28.374694, lng: -81.5515927 }, referralId: 4},
+       {title: "University of Central Florida",  location: {lat: 28.580463, lng: -81.250721}, referralId: 5}
+     ],
+     query: ''
      // errorSearching: false
   }
 
+  updateQuery = (queryText) => {
+    this.setState({ query: queryText.trim() })
 
-  updateQuery = (query) => {
-    // this.setState({ query: query })
+    const { locations, query } = this.state;
 
-    //refactoring of the shelving and auxliary functions
-    // const books  = this.state.books.map(book => {
-    //     const found = this.props.appStateBooks.find(appBook => appBook.id === book.id);
-    //     if(found) {
-    //         return found;
-    //     } else {
-    //         return book
-    //     }
-    // })
+    let showingLocations
+    if (query) {
+      const match = new RegExp(escapeRegExp(query), 'i')
+      showingLocations = locations.filter((contact) => match.test(contact.name))
+    } else {
+      showingLocations = locations
+    }
 
-    // if (query) {
-    //
-    //   BooksAPI.search(query.trim()).then(
-    //       books => {
-    //         if(query===this.state.query) {
-    //           if (books.length > 0) {
-    //             this.setState({books: books, errorSearching: false})
-    //             // this.shelving(this.state.books)
-    //             this.setState({ books });
-    //           } else {
-    //             this.setState({ books: [], errorSearching: true})
-    //           }}}).then(this.setState({ books }));
-    //         }  else {
-    //           this.setState({ books: [], errorSearching: false });
-    //         }//else
+    this.setState({ locations: showingLocations })
+    console.log(locations)
 
-      // this.shelving(this.state.books)
+    this.initMap()
 
-      // this.initMap()
+  }
 
-  }//updateQuery
+
+  // updateQuery = (query) => {
+  //   this.setState({ query: query })
+  //
+  //   //refactoring of the shelving and auxliary functions
+  //   const locations  = this.state.locations.map(item => {
+  //     // const found = this.props.appStateBooks.find(appBook => appBook.id === item.id);
+  //     const found = this.state.locations.find(appBook => appBook.id === item.id);
+  //       if(found) {
+  //           return found;
+  //       } else {
+  //           return item
+  //       }
+  //   })
+  //
+  //   if (query) {
+  //   //
+  //   //   BooksAPI.search(query.trim()).then(
+  //   //       books => {
+  //   //         if(query===this.state.query) {
+  //   //           if (books.length > 0) {
+  //   //             this.setState({books: books, errorSearching: false})
+  //   //             // this.shelving(this.state.books)
+  //   //             this.setState({ books });
+  //   //           } else {
+  //   //             this.setState({ books: [], errorSearching: true})
+  //   //           }}}).then(this.setState({ books }));
+  //   //         }  else {
+  //   //           this.setState({ books: [], errorSearching: false });
+  //   //         }//else
+  //
+  //     // this.shelving(this.state.books)
+  //
+  //      this.initMap()
+  //
+  // }//updateQuery
 
   foursquareSearch(object) {
     const query = document.getElementById('query-input').value
@@ -85,16 +100,13 @@ class App extends Component {
     fetch('https://api.foursquare.com/v2/venues/explore?client_id=SJV1ISHPCCXJPD51FD0YFB5424GZZ0Q1E1THCOM12G21UPKO&client_secret=QJQBOLAC1SPUD0KZR2TJ5R1QGE3TEJGFWPPUB4HUHX1OLXBF&v=20180323&ll=28.5427282,-81.3749294&radius=5000&query='+query)
       .then(response => response.json()).then(result => {
         // console.log(result.response.groups[0].items)})
-        console.log(result.response.groups[0].items);
-        console.log("such")
+        // console.log(result.response.groups[0].items);
+        // console.log("such")
         object.setState({ locations : result.response.groups[0].items});
         console.log(this.state.locations);
         object.initMap()
-        // this.initMap();
       })
       .catch(err => console.log("I received the following error: "+err))
-          // this.setState({ books });
-
 
   }//foursquareSearch
 
@@ -104,6 +116,7 @@ class App extends Component {
 
   render() {
     //React blue: 00d8ff
+
     return (
       <div className="App">
         <header className="App-header">
@@ -132,7 +145,6 @@ class App extends Component {
 
   initMap() {
 
-
     map = new window.google.maps.Map(document.getElementById('map'), {
       center: {lat: 28.5427282 , lng:-81.3749294 },
       zoom: 13,
@@ -145,7 +157,6 @@ class App extends Component {
     // Create a "highlighted location" marker color for when the user
     // mouses over the marker.
     var highlightedIcon = this.makeMarkerIcon('FFFF24');
-
 
     let bounds = new window.google.maps.LatLngBounds();
 
