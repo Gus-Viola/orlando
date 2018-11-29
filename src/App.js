@@ -39,7 +39,7 @@ class App extends Component {
 
 
   updateQuery = (query) => {
-    // this.setState({ query: query })
+    this.setState({ query: query })
 
     //refactoring of the shelving and auxliary functions
     // const books  = this.state.books.map(book => {
@@ -51,7 +51,7 @@ class App extends Component {
     //     }
     // })
 
-    // if (query) {
+    if (query) {
     //
     //   BooksAPI.search(query.trim()).then(
     //       books => {
@@ -69,17 +69,19 @@ class App extends Component {
 
       // this.shelving(this.state.books)
 
-fetch('https://api.foursquare.com/v2/venues/explore?client_id=SJV1ISHPCCXJPD51FD0YFB5424GZZ0Q1E1THCOM12G21UPKO&client_secret=QJQBOLAC1SPUD0KZR2TJ5R1QGE3TEJGFWPPUB4HUHX1OLXBF&v=20180323&ll=40.7413549,-73.9980244&radius=1000&query=attraction')
+fetch('https://api.foursquare.com/v2/venues/explore?client_id=SJV1ISHPCCXJPD51FD0YFB5424GZZ0Q1E1THCOM12G21UPKO&client_secret=QJQBOLAC1SPUD0KZR2TJ5R1QGE3TEJGFWPPUB4HUHX1OLXBF&v=20180323&ll=40.7413549,-73.9980244&radius=1000&query='+query)
   .then(response => response.json()).then(result => {
     // console.log(result.response.groups[0].items)})
     console.log(result.response.groups[0].items);
     this.setState({ locations : result.response.groups[0].items});
     console.log(this.state.locations);
-    this.initMap();
+    // this.initMap();
   })
   .catch(err => console.log("I received the following error: "+err))
       // this.setState({ books });
+    }//if
 
+this.initMap();
   }//updateQuery
 
 
@@ -87,6 +89,8 @@ fetch('https://api.foursquare.com/v2/venues/explore?client_id=SJV1ISHPCCXJPD51FD
   componentDidMount() {
     this.initMap();
   }
+
+
 
   render() {
     //React blue: 00d8ff
@@ -96,9 +100,10 @@ fetch('https://api.foursquare.com/v2/venues/explore?client_id=SJV1ISHPCCXJPD51FD
           <img src={logo} className="App-logo" alt="logo" />
           <input
             type="text"
-            placeholder="Search by title or author"
-            value = {this.state.query}
+            placeholder="Search for your attraction!"
+            // value = {this.state.query}
             onChange={(event)=> this.updateQuery(event.target.value) }
+            id = "query-input"
           />
 
         </header>
@@ -116,17 +121,6 @@ fetch('https://api.foursquare.com/v2/venues/explore?client_id=SJV1ISHPCCXJPD51FD
       zoom: 13,
       mapTypeControl: false
     });
-
-    // These are the real estate listings that will be shown to the user.
-    // Normally we'd have these in a database instead.
-    // const locations = [
-    //   {title: 'Park Ave Penthouse', location: {lat: 40.7713024, lng: -73.9632393}},
-    //   {title: 'Chelsea Loft', location: {lat: 40.7444883, lng: -73.9949465}},
-    //   {title: 'Union Square Open Floor Plan', location: {lat: 40.7347062, lng: -73.9895759}},
-    //   {title: 'East Village Hip Studio', location: {lat: 40.7281777, lng: -73.984377}},
-    //   {title: 'TriBeCa Artsy Bachelor Pad', location: {lat: 40.7195264, lng: -74.0089934}},
-    //   {title: 'Chinatown Homey Space', location: {lat: 40.7180628, lng: -73.9961237}}
-    // ];
 
     // Style the markers a bit. This will be our listing marker icon.
     var defaultIcon = this.makeMarkerIcon('00d8ff');
