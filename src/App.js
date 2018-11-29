@@ -13,7 +13,6 @@ https://www.npmjs.com/package/yelp-api
 
 2) E colocar uma lista dos lugares com a opção de filtrar eles por nome
 3) Aria Roles
-4) Yelp API
 
 */
 
@@ -26,20 +25,27 @@ class App extends Component {
   state = {
 
       locations: [
-       {title: 'Park Ave Penthouse', location: {lat: 40.7713024, lng: -73.9632393}, marker: 6},
-       {title: 'Chelsea Loft', location: {lat: 40.7444883, lng: -73.9949465}, marker: 1},
-       {title: 'Union Square Open Floor Plan', location: {lat: 40.7347062, lng: -73.9895759}, marker: 2},
-       {title: 'East Village Hip Studio', location: {lat: 40.7281777, lng: -73.984377}, marker: 3},
-       {title: 'TriBeCa Artsy Bachelor Pad', location: {lat: 40.7195264, lng: -74.0089934}, marker: 4},
-       {title: 'Chinatown Homey Space', location: {lat: 40.7180628, lng: -73.9961237}, marker: 5}
-     ],
-     query: '',
-     errorSearching: false
+     //   {title: 'Park Ave Penthouse', location: {lat: 40.7713024, lng: -73.9632393}, marker: 6},
+     //   {title: 'Chelsea Loft', location: {lat: 40.7444883, lng: -73.9949465}, marker: 1},
+     //   {title: 'Union Square Open Floor Plan', location: {lat: 40.7347062, lng: -73.9895759}, marker: 2},
+     //   {title: 'East Village Hip Studio', location: {lat: 40.7281777, lng: -73.984377}, marker: 3},
+     //   {title: 'TriBeCa Artsy Bachelor Pad', location: {lat: 40.7195264, lng: -74.0089934}, marker: 4},
+     //   {title: 'Chinatown Homey Space', location: {lat: 40.7180628, lng: -73.9961237}, marker: 5}
+     // ]
+
+       {title: "Walt Disney's Magic Kingdom",  location: {lat: 28.417663 , lng: -81.5834007}},
+       {title: "Bob Evans",  location: {lat: 28.3332783 , lng: -81.5850286}},
+       {title: "Universal Studios Florida",  location: {lat: 28.4731193 , lng: -81.4671166}},
+       {title: "Epcot Center",  location: {lat: 28.374694, lng: -81.5515927 }},
+       {title: "University of Central Florida",  location: {lat: 28.580463, lng: -81.250721}}
+     ]
+     // query: '',
+     // errorSearching: false
   }
 
 
   updateQuery = (query) => {
-    this.setState({ query: query })
+    // this.setState({ query: query })
 
     //refactoring of the shelving and auxliary functions
     // const books  = this.state.books.map(book => {
@@ -51,7 +57,7 @@ class App extends Component {
     //     }
     // })
 
-    if (query) {
+    // if (query) {
     //
     //   BooksAPI.search(query.trim()).then(
     //       books => {
@@ -69,28 +75,32 @@ class App extends Component {
 
       // this.shelving(this.state.books)
 
-fetch('https://api.foursquare.com/v2/venues/explore?client_id=SJV1ISHPCCXJPD51FD0YFB5424GZZ0Q1E1THCOM12G21UPKO&client_secret=QJQBOLAC1SPUD0KZR2TJ5R1QGE3TEJGFWPPUB4HUHX1OLXBF&v=20180323&ll=40.7413549,-73.9980244&radius=1000&query='+query)
-  .then(response => response.json()).then(result => {
-    // console.log(result.response.groups[0].items)})
-    console.log(result.response.groups[0].items);
-    this.setState({ locations : result.response.groups[0].items});
-    console.log(this.state.locations);
-    // this.initMap();
-  })
-  .catch(err => console.log("I received the following error: "+err))
-      // this.setState({ books });
-    }//if
+      // this.initMap()
 
-this.initMap();
   }//updateQuery
 
+  foursquareSearch(object) {
+    const query = document.getElementById('query-input').value
+    console.log(query)
+    fetch('https://api.foursquare.com/v2/venues/explore?client_id=SJV1ISHPCCXJPD51FD0YFB5424GZZ0Q1E1THCOM12G21UPKO&client_secret=QJQBOLAC1SPUD0KZR2TJ5R1QGE3TEJGFWPPUB4HUHX1OLXBF&v=20180323&ll=28.5427282,-81.3749294&radius=5000&query='+query)
+      .then(response => response.json()).then(result => {
+        // console.log(result.response.groups[0].items)})
+        console.log(result.response.groups[0].items);
+        console.log("such")
+        object.setState({ locations : result.response.groups[0].items});
+        console.log(this.state.locations);
+        object.initMap()
+        // this.initMap();
+      })
+      .catch(err => console.log("I received the following error: "+err))
+          // this.setState({ books });
 
+
+  }//foursquareSearch
 
   componentDidMount() {
     this.initMap();
   }
-
-
 
   render() {
     //React blue: 00d8ff
@@ -105,6 +115,13 @@ this.initMap();
             onChange={(event)=> this.updateQuery(event.target.value) }
             id = "query-input"
           />
+          <button
+              type="button"
+              id="button"
+              onClick={() => this.foursquareSearch(this)}
+            >
+            Foursquare Search
+            </button>
 
         </header>
           <div id="map"></div>
@@ -117,7 +134,7 @@ this.initMap();
 
 
     map = new window.google.maps.Map(document.getElementById('map'), {
-      center: {lat: 40.7413549, lng: -73.9980244},
+      center: {lat: 28.5427282 , lng:-81.3749294 },
       zoom: 13,
       mapTypeControl: false
     });
@@ -189,7 +206,10 @@ this.initMap();
     // Extend the boundaries of the map for each marker
     map.fitBounds(bounds);
 
-
+//     var listener = window.google.maps.event.addListener(map, "idle", function() {
+//   if (map.getZoom() > 25) map.setZoom(25);
+//   window.google.maps.event.removeListener(listener);
+// });
 
   }//initMap()
 
