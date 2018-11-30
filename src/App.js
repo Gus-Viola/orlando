@@ -38,14 +38,14 @@ class App extends Component {
   }
 
   updateQuery = (queryText) => {
+    const { locations, query } = this.state;
+    let showingLocations
+
     this.setState({ query: queryText.trim() })
 
-    const { locations, query } = this.state;
-
-    let showingLocations
     if (query) {
       const match = new RegExp(escapeRegExp(query), 'i')
-      showingLocations = locations.filter((contact) => match.test(contact.name))
+      showingLocations = locations.filter((contact) => match.test(contact.title))
     } else {
       showingLocations = locations
     }
@@ -127,11 +127,13 @@ class App extends Component {
             // value = {this.state.query}
             onChange={(event)=> this.updateQuery(event.target.value) }
             id = "query-input"
+            role="filter"
           />
           <button
               type="button"
               id="button"
               onClick={() => this.foursquareSearch(this)}
+              role="search"
             >
             Foursquare Search
             </button>

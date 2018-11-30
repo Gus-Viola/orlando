@@ -1,44 +1,46 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Udacity's Neighborhood Project, for the Advanced Web Dev NanoDegree, by [Gus Viola](https://linkedin.com/in/gusviola/)
+=============================================
 
-## Available Scripts
+## Table of Contents
 
-In the project directory, you can run:
+* [Introduction](#introduction)
+* [Installation](#Installation)
+* [Instructions](#instructions)
+* [Dependencies](#dependencies)
+* [License](#License)
 
-### `npm start`
+## Introduction
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+This is a single-page React app which allows you to search for attractions in Orlando, Florida. It is a showcase for my skills using the React DOM and accessing APIs.
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+It was built from scratch using create-react-app.
 
-### `npm test`
+## Installation
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+If you have [node.js](https://nodejs.org/) installed in your machine:
 
-### `npm run build`
+* Click on the <span style="color:green">green "Clone or download" button</span> above to the right, get all files and folders in your drive.
+* Install all project dependencies with `npm install`
+* Start the development server with `yarn start`
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+If you are interested in programming, feel free to [clone](https://help.github.com/articles/cloning-a-repository/) and use the code! It is distributed under the [MIT License](https://choosealicense.com/licenses/mit/).
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+## Instructions
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+* The text field is primarily used to filter the current attractions. Just type in it.
+* The text field doubles as a Foursquare search for more attractions: type in it and press the button.
+* The user can be zoom into the map and move around, in a Google Maps application.
 
-### `npm run eject`
+## Dependencies
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+This app uses the [React](https://reactjs.org/) library. Dependencies:
+* [React DOM](https://www.npmjs.com/package/react-dom)
+* [escape-string-regexp](https://www.npmjs.com/package/escape-string-regexp)
+* [Google Maps API](https://developers.google.com/maps/documentation/)
+* [Foursquare API](https://developer.foursquare.com/)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## License
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+The contents of this repository are covered under the [MIT License](https://choosealicense.com/licenses/mit/).
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+According to [choosealicense](https://choosealicense.com/), "the MIT License is a permissive license that is short and to the point. It lets people do anything they want with your code as long as they provide attribution back to you and don’t hold you liable."
