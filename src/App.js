@@ -14,11 +14,13 @@ https://www.npmjs.com/package/yelp-api
 
 Faltam:
 2) Lista dos lugares com a opção de filtrar eles por nome
+map fitbounds does not work
+InvalidValueError: setMap: not an instance of Map; and not an instance of StreetViewPanorama
 
 */
 
 // let map;
-let markers =[];
+// let markers =[];
 
 
 class App extends Component {
@@ -33,19 +35,22 @@ class App extends Component {
        {title: "University of Central Florida",  location: {lat: 28.580463, lng: -81.250721}, referralId: 5}
      ],
      query: '',
-     map: ''
+     map: '',
+     markers: []
      // errorSearching: false
   }
 
   updateQuery = (queryText) => {
-    const { locations, query } = this.state;
+    let { locations, query } = this.state;
     let showingLocations
 
-    this.setState({ query: queryText.trim() })
+    this.setState({ query: queryText })
 
     if (query) {
       const match = new RegExp(escapeRegExp(query), 'i')
-      showingLocations = locations.filter((contact) => match.test(contact.title))
+      // showingLocations = locations.filter((loc) => match.test(loc.title))
+      showingLocations = locations.filter((loc) => match.test(loc.venue.name))
+      console.log(showingLocations)
     } else {
       showingLocations = locations
     }
@@ -111,6 +116,7 @@ class App extends Component {
   }//foursquareSearch
 
   componentDidMount() {
+    this.foursquareSearch(this)
     this.initMap();
   }
 
@@ -156,19 +162,15 @@ class App extends Component {
     })
 
     let map = this.state.map
+    let markers = this.state.markers
 
-    // map = new window.google.maps.Map(document.getElementById('map'), {
-    //   center: {lat: 28.5427282 , lng:-81.3749294 },
-    //   zoom: 13,
-    //   mapTypeControl: false
-    // });
 
     // Style the markers a bit. This will be our listing marker icon.
-    var defaultIcon = this.makeMarkerIcon('00d8ff');
+    const defaultIcon = this.makeMarkerIcon('00d8ff');
 
     // Create a "highlighted location" marker color for when the user
     // mouses over the marker.
-    var highlightedIcon = this.makeMarkerIcon('FFFF24');
+    const highlightedIcon = this.makeMarkerIcon('FFFF24');
 
     let bounds = new window.google.maps.LatLngBounds();
 
@@ -198,7 +200,9 @@ class App extends Component {
         id: i
       });
       // Push the marker to our array of markers.
-      markers.push(marker);
+      // this.setState( {
+      //   markers: markers.push(marker)})
+      //   console.log(markers)
       // Create an onclick event to open an infowindow at each marker.
       // marker.addListener('click', function() {
       //   pop(this, largeInfowindow);
@@ -224,10 +228,10 @@ class App extends Component {
       });
 
 
-      bounds.extend(markers[i].position);
+      // bounds.extend(markers[i].position);
     }//loop
     // Extend the boundaries of the map for each marker
-    // map.fitBounds(bounds);
+    // map.fitBounds();
 
 //     var listener = window.google.maps.event.addListener(map, "idle", function() {
 //   if (map.getZoom() > 25) map.setZoom(25);
