@@ -29,11 +29,11 @@ class App extends Component {
   state = {
 
       locations: [
-       {title: "Walt Disney's Magic Kingdom",  location: {lat: 28.417663 , lng: -81.5834007}, referralId: 1},
-       {title: "Bob Evans",  location: {lat: 28.3332783 , lng: -81.5850286}, referralId: 2},
-       {title: "Universal Studios Florida",  location: {lat: 28.4731193 , lng: -81.4671166}, referralId: 3},
-       {title: "Epcot Center",  location: {lat: 28.374694, lng: -81.5515927 }, referralId: 4},
-       {title: "University of Central Florida",  location: {lat: 28.580463, lng: -81.250721}, referralId: 5}
+       // {title: "Walt Disney's Magic Kingdom",  location: {lat: 28.417663 , lng: -81.5834007}, referralId: 1},
+       // {title: "Bob Evans",  location: {lat: 28.3332783 , lng: -81.5850286}, referralId: 2},
+       // {title: "Universal Studios Florida",  location: {lat: 28.4731193 , lng: -81.4671166}, referralId: 3},
+       // {title: "Epcot Center",  location: {lat: 28.374694, lng: -81.5515927 }, referralId: 4},
+       // {title: "University of Central Florida",  location: {lat: 28.580463, lng: -81.250721}, referralId: 5}
      ],
      query: '',
      map: '',
@@ -109,7 +109,7 @@ class App extends Component {
         // console.log(result.response.groups[0].items);
         // console.log("such")
         object.setState({ locations : result.response.groups[0].items});
-        console.log(this.state.locations);
+        // console.log(this.state.locations);
         object.initMap()
       })
       .catch(err => console.log("I received the following error: "+err))
@@ -134,7 +134,6 @@ class App extends Component {
             // value = {this.state.query}
             onChange={(event)=> this.updateQuery(event.target.value) }
             id = "query-input"
-            role="filter"
           />
           <button
               type="button"
@@ -144,6 +143,11 @@ class App extends Component {
             >
             Foursquare Search
             </button>
+            <ul>
+              {this.state.locations.map(loc => (
+                <li key={loc.venue.name} onClick={(event) => this.clickList(loc)}>{loc.venue.name}</li>
+              ))}
+            </ul>
 
             </div>
           <div id="map"></div>
@@ -163,8 +167,7 @@ class App extends Component {
     })
 
     let map = this.state.map
-    let markers = this.state.markers
-
+    let markers = this.state.markers;
 
     // Style the markers a bit. This will be our listing marker icon.
     const defaultIcon = this.makeMarkerIcon('00d8ff');
@@ -201,9 +204,9 @@ class App extends Component {
         id: i
       });
       // Push the marker to our array of markers.
-      // this.setState( {
-      //   markers: markers.push(marker)})
-      //   console.log(markers)
+      markers.push(marker);
+      this.setState({  markers: markers })
+      // console.log(markers)
       // Create an onclick event to open an infowindow at each marker.
       // marker.addListener('click', function() {
       //   pop(this, largeInfowindow);
@@ -229,10 +232,12 @@ class App extends Component {
       });
 
 
-      // bounds.extend(markers[i].position);
+      bounds.extend(markers[i].position);
     }//loop
     // Extend the boundaries of the map for each marker
-    // map.fitBounds();
+    // console.log(map, bounds)
+    // map = this.state.map
+    // map.fitBounds(bounds);
 
 //     var listener = window.google.maps.event.addListener(map, "idle", function() {
 //   if (map.getZoom() > 25) map.setZoom(25);
@@ -251,6 +256,20 @@ class App extends Component {
       new window.google.maps.Size(21,34));
     return markerImage;
   }//makeMarkerIcon()
+
+  clickList(loc) {
+    console.log("clickList function called with ", loc)
+    for (let i=0; i<this.state.locations.length; i++) {
+      // console.log(i)
+      if (loc.referralId === this.state.locations[i].referralId) {
+        console.log(this.state.locations[i])
+        console.log(this.state.markers)
+        window.google.maps.event.trigger(this.state.markers[i], 'click');
+        console.log(this.state.markers[i])
+      }
+    }
+  }
+
 
 
 }//App

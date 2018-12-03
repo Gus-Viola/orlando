@@ -17,9 +17,14 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  /* font-size: calc(10px + 2vmin); */
+  font-size: 12px;
   color: white;
   flex: 20;
+}
+
+li {
+  text-align: left;
 }
 
 
@@ -51,10 +56,11 @@ body {
 }
 
 input {
-  font-size: 20px;
+  /* font-size: 15px; */
   border-radius: 18px;
   border: 2px solid #00d8ff;
-  width: 300px;
+  width: 200px;
+  margin:10px;
 
 }
 
@@ -63,7 +69,7 @@ button {
   /* border-radius: 18px; */
   /* border: 2px solid #00d8ff; */
   /* width: 300px; */
-  margin-top: 15px;
+  /* margin-top: 15px; */
 
 }
 
