@@ -14,11 +14,10 @@ https://www.npmjs.com/package/yelp-api
 
 Faltam:
 2) Lista dos lugares com a opção de filtrar eles por nome
-3) Aria Roles
 
 */
 
-let map;
+// let map;
 let markers =[];
 
 
@@ -33,7 +32,8 @@ class App extends Component {
        {title: "Epcot Center",  location: {lat: 28.374694, lng: -81.5515927 }, referralId: 4},
        {title: "University of Central Florida",  location: {lat: 28.580463, lng: -81.250721}, referralId: 5}
      ],
-     query: ''
+     query: '',
+     map: ''
      // errorSearching: false
   }
 
@@ -147,11 +147,21 @@ class App extends Component {
 
   initMap() {
 
-    map = new window.google.maps.Map(document.getElementById('map'), {
-      center: {lat: 28.5427282 , lng:-81.3749294 },
-      zoom: 13,
-      mapTypeControl: false
-    });
+    this.setState({
+      map: new window.google.maps.Map(document.getElementById('map'), {
+        center: {lat: 28.5427282 , lng:-81.3749294 },
+        zoom: 13,
+        mapTypeControl: false
+      })
+    })
+
+    let map = this.state.map
+
+    // map = new window.google.maps.Map(document.getElementById('map'), {
+    //   center: {lat: 28.5427282 , lng:-81.3749294 },
+    //   zoom: 13,
+    //   mapTypeControl: false
+    // });
 
     // Style the markers a bit. This will be our listing marker icon.
     var defaultIcon = this.makeMarkerIcon('00d8ff');
@@ -217,7 +227,7 @@ class App extends Component {
       bounds.extend(markers[i].position);
     }//loop
     // Extend the boundaries of the map for each marker
-    map.fitBounds(bounds);
+    // map.fitBounds(bounds);
 
 //     var listener = window.google.maps.event.addListener(map, "idle", function() {
 //   if (map.getZoom() > 25) map.setZoom(25);
