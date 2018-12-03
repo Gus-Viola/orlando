@@ -16,6 +16,7 @@ Faltam:
 2) Lista dos lugares com a opção de filtrar eles por nome
 map fitbounds does not work
 InvalidValueError: setMap: not an instance of Map; and not an instance of StreetViewPanorama
+showWindow broken, no text
 
 */
 
@@ -125,7 +126,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <header className="App-header">
+        <div className="App-list">
           <img src={logo} className="App-logo" alt="logo" />
           <input
             type="text"
@@ -144,7 +145,7 @@ class App extends Component {
             Foursquare Search
             </button>
 
-        </header>
+            </div>
           <div id="map"></div>
       </div>
 

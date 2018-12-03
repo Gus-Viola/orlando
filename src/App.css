@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  display: flex;
 }
 
 .App-logo {
@@ -7,16 +8,21 @@
   height: 10vmin;
 }
 
-.App-header {
+.App-list {
   background-color: #282c34;
-  min-height: 10vh;
-  display: flex;
-  flex-direction: row;
+  /* min-height: 10vh; */
+  /* height: 100vh;
+  width: 20vw;
+  display: flex; */
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  flex: 20;
 }
+
+
 
 .App-link {
   color: #61dafb;
@@ -57,7 +63,7 @@ button {
   /* border-radius: 18px; */
   /* border: 2px solid #00d8ff; */
   /* width: 300px; */
-  margin-left: 15px;
+  margin-top: 15px;
 
 }
 
@@ -81,11 +87,13 @@ hr {
 }
 
 #map {
-  bottom:0px;
-  height: 90vh;
+  /* bottom:0px; */
+  height: 100vh;
+  width: 80vh;
   /* left: 362px; */
   /* position: absolute; */
-  right: 0px;
+  /* right: 0px; */
+  flex: 80;
 }
 
 .options-box {
