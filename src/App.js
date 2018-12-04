@@ -9,43 +9,31 @@ initMap(), populateInfoWindow(), marker functions
 as well as suggested variables, such as map, markers, etc.
 The following code came from my Udacity's myreads project
 query state, updateQuery, etc
-I used the npm yelp package
-https://www.npmjs.com/package/yelp-api
 
 Faltam:
-2) Lista dos lugares com a opção de filtrar eles por nome
-map fitbounds does not work
-InvalidValueError: setMap: not an instance of Map; and not an instance of StreetViewPanorama
-showWindow broken, no text
-
+Fix: filter list
+Fix: fitBounds
 */
-
-// let map;
-// let markers =[];
 
 
 class App extends Component {
 
   state = {
 
-      locations: [
-       // {title: "Walt Disney's Magic Kingdom",  location: {lat: 28.417663 , lng: -81.5834007}, referralId: 1},
-       // {title: "Bob Evans",  location: {lat: 28.3332783 , lng: -81.5850286}, referralId: 2},
-       // {title: "Universal Studios Florida",  location: {lat: 28.4731193 , lng: -81.4671166}, referralId: 3},
-       // {title: "Epcot Center",  location: {lat: 28.374694, lng: -81.5515927 }, referralId: 4},
-       // {title: "University of Central Florida",  location: {lat: 28.580463, lng: -81.250721}, referralId: 5}
-     ],
+      locations: [],
      query: '',
      map: '',
      markers: []
-     // errorSearching: false
   }
 
   updateQuery = (queryText) => {
-    let { locations, query } = this.state;
-    let showingLocations
+    let { locations, query, markers } = this.state;
+    let showingLocations;
 
-    this.setState({ query: queryText })
+    this.setState({ query: queryText });
+
+    //I must first hide all markers
+    markers.map(marker => marker.setMap(null));
 
     if (query) {
       const match = new RegExp(escapeRegExp(query), 'i')
@@ -60,45 +48,8 @@ class App extends Component {
     console.log(locations)
 
     this.initMap()
+  }//updateQuery
 
-  }
-
-
-  // updateQuery = (query) => {
-  //   this.setState({ query: query })
-  //
-  //   //refactoring of the shelving and auxliary functions
-  //   const locations  = this.state.locations.map(item => {
-  //     // const found = this.props.appStateBooks.find(appBook => appBook.id === item.id);
-  //     const found = this.state.locations.find(appBook => appBook.id === item.id);
-  //       if(found) {
-  //           return found;
-  //       } else {
-  //           return item
-  //       }
-  //   })
-  //
-  //   if (query) {
-  //   //
-  //   //   BooksAPI.search(query.trim()).then(
-  //   //       books => {
-  //   //         if(query===this.state.query) {
-  //   //           if (books.length > 0) {
-  //   //             this.setState({books: books, errorSearching: false})
-  //   //             // this.shelving(this.state.books)
-  //   //             this.setState({ books });
-  //   //           } else {
-  //   //             this.setState({ books: [], errorSearching: true})
-  //   //           }}}).then(this.setState({ books }));
-  //   //         }  else {
-  //   //           this.setState({ books: [], errorSearching: false });
-  //   //         }//else
-  //
-  //     // this.shelving(this.state.books)
-  //
-  //      this.initMap()
-  //
-  // }//updateQuery
 
   foursquareSearch(object) {
     const query = document.getElementById('query-input').value
@@ -122,7 +73,6 @@ class App extends Component {
   }
 
   render() {
-    //React blue: 00d8ff
 
     return (
       <div className="App">
@@ -169,18 +119,12 @@ class App extends Component {
     let map = this.state.map
     let markers = this.state.markers;
 
-    // Style the markers a bit. This will be our listing marker icon.
     const defaultIcon = this.makeMarkerIcon('00d8ff');
-
-    // Create a "highlighted location" marker color for when the user
-    // mouses over the marker.
     const highlightedIcon = this.makeMarkerIcon('FFFF24');
 
     let bounds = new window.google.maps.LatLngBounds();
 
-    // The following group uses the location array to create an array of markers on initialize.
     for (let i = 0; i < this.state.locations.length; i++) {
-      // Get the position from the location array.
       let position;
       if (this.state.locations[i].location) {
          position = this.state.locations[i].location;
@@ -208,8 +152,6 @@ class App extends Component {
       this.setState({  markers: markers })
       // console.log(markers)
       // Create an onclick event to open an infowindow at each marker.
-      // marker.addListener('click', function() {
-      //   pop(this, largeInfowindow);
       marker.addListener('click', function() {
         const largeInfowindow = new window.google.maps.InfoWindow();
 
@@ -231,18 +173,11 @@ class App extends Component {
         this.setIcon(defaultIcon);
       });
 
-
       bounds.extend(markers[i].position);
     }//loop
     // Extend the boundaries of the map for each marker
-    // console.log(map, bounds)
     map = this.state.map
     if (map) map.fitBounds(bounds);
-
-//     var listener = window.google.maps.event.addListener(map, "idle", function() {
-//   if (map.getZoom() > 25) map.setZoom(25);
-//   window.google.maps.event.removeListener(listener);
-// });
 
   }//initMap()
 
@@ -255,36 +190,30 @@ class App extends Component {
       new window.google.maps.Point(10, 34),
       new window.google.maps.Size(21,34));
     return markerImage;
+
   }//makeMarkerIcon()
 
   clickList(loc) {
-    console.log("clickList function called with ", loc)
     for (let i=0; i<this.state.locations.length; i++) {
       // console.log(i)
       if (loc.referralId === this.state.locations[i].referralId) {
-        console.log(this.state.locations[i])
-        console.log(this.state.markers)
         window.google.maps.event.trigger(this.state.markers[i], 'click');
-        console.log(this.state.markers[i])
       }
     }
-  }
-
-
+  }//clickList
 
 }//App
 
 export default App;
 
 
-// <p>
-//   Edit <code>src/App.js</code> and save to reload.
-// </p>
-// <a
-//   className="App-link"
-//   href="https://reactjs.org"
-//   target="_blank"
-//   rel="noopener noreferrer"
-// >
-//   Learn React
-// </a>
+
+
+// locations: [
+ // {title: "Walt Disney's Magic Kingdom",  location: {lat: 28.417663 , lng: -81.5834007}, referralId: 1},
+ // {title: "Bob Evans",  location: {lat: 28.3332783 , lng: -81.5850286}, referralId: 2},
+ // {title: "Universal Studios Florida",  location: {lat: 28.4731193 , lng: -81.4671166}, referralId: 3},
+ // {title: "Epcot Center",  location: {lat: 28.374694, lng: -81.5515927 }, referralId: 4},
+ // {title: "University of Central Florida",  location: {lat: 28.580463, lng: -81.250721}, referralId: 5}
+// ],
+//React blue: 00d8ff
