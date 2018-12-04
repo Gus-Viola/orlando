@@ -130,7 +130,7 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <input
             type="text"
-            placeholder="Search for your attraction!"
+            placeholder="Search for your Orlando attraction!"
             // value = {this.state.query}
             onChange={(event)=> this.updateQuery(event.target.value) }
             id = "query-input"
@@ -236,8 +236,8 @@ class App extends Component {
     }//loop
     // Extend the boundaries of the map for each marker
     // console.log(map, bounds)
-    // map = this.state.map
-    // map.fitBounds(bounds);
+    map = this.state.map
+    if (map) map.fitBounds(bounds);
 
 //     var listener = window.google.maps.event.addListener(map, "idle", function() {
 //   if (map.getZoom() > 25) map.setZoom(25);
