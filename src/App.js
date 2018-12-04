@@ -39,13 +39,13 @@ class App extends Component {
       const match = new RegExp(escapeRegExp(query), 'i')
       // showingLocations = locations.filter((loc) => match.test(loc.title))
       showingLocations = locations.filter((loc) => match.test(loc.venue.name))
-      console.log(showingLocations)
+      // console.log(showingLocations)
     } else {
       showingLocations = locations
     }
 
     this.setState({ locations: showingLocations })
-    console.log(locations)
+    // console.log(locations)
 
     this.initMap()
   }//updateQuery
@@ -64,6 +64,11 @@ class App extends Component {
         object.initMap()
       })
       .catch(err => console.log("I received the following error: "+err))
+
+      // let {map} = this.state
+      // let bounds = new window.google.maps.LatLngBounds();
+      // debugger
+      // if (map) map.fitBounds(bounds)
 
   }//foursquareSearch
 
